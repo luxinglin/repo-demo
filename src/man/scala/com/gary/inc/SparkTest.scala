@@ -1,6 +1,5 @@
 package com.gary.inc
 
-
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.SparkContext._
 
