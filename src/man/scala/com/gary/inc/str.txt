@@ -1,0 +1,11 @@
+Executor : Finished task 0.0 in stage
+RemoteActorRefProvider$RemotingTerminator: Shutting down remote daemon
+TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool
+a
+b
+c
+d
+Executor : Finished task 0.0 in stage
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/C:/Work/00.Bins/spark-1.3.1-bin-hadoop2.4/lib/spark-assembly-1.3.1-hadoop2.4.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/C:/Work/00.Bins/spark-1.3.1-bin-hadoop2.4/lib/spark-examples-1.3.1-hadoop2.4.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
