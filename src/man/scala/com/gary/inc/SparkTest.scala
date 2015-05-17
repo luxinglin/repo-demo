@@ -1,8 +1,12 @@
 package com.gary.inc
-import org.apache.spark.{SparkConf, SparkContext}
 
-import org.apache.spark.SparkContext._ 
 
+import org.apache.spark.{SparkContext, SparkConf}
+import org.apache.spark.SparkContext._
+
+/**
+ * Created by luxing on 2015/5/17.
+ */
 case class PBInfo(name: String, sex: String, age: Int, pf: String)
 
 object SparkTest {
@@ -12,22 +16,22 @@ object SparkTest {
       .set("spark.eventLog.compress", "false")
     val ssc = new SparkContext(sparkConf)
 
-    println("¼òµ¥RDD:")
+    println("ç®€å•RDD:")
     val rdd = ssc.parallelize(Seq(1, 2, 3, 4, 5, 6))
     println("result:")
     rdd.filter(_ < 3).map(_ * 2).foreach(println)
-    println("¶ÁÈ¡ÎÄ¼ş:")
+    println("è¯»å–æ–‡ä»¶:")
     //"hdfs://10.0.72.64:9000/hbase/rs600/bizRem.txt"
     val txtRdd = ssc.textFile("C:\\Work\\90.TEMP\\IDEA_WorkSpace\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\str.txt")
 
-    println("ĞĞÊı£º" + txtRdd.count())
+    println("è¡Œæ•°ï¼š" + txtRdd.count())
     var idx = 0
     txtRdd.foreach(item => {
       idx += 1
       println(idx + "::" + Thread.currentThread().getName + "::" + item.toString)
     })
 
-    println("°ÑĞĞÒÔ¿Õ¸ñ²ğ·Ö £­> ¸øÃ¿¸ö¾ä·¨µ¥´Ê´òÉÏ¸öÊı£¬±ä³Éµ¥´Ê(word,1) -> ·Ö×é»ã×Ü -> ¸ù¾İÊıÁ¿ÅÅĞò ->±éÀú´òÓ¡")
+    println("æŠŠè¡Œä»¥ç©ºæ ¼æ‹†åˆ† ï¼> ç»™æ¯ä¸ªå•è¯æ‰“ä¸Šä¸ªæ•°ï¼Œå˜æˆå•è¯(word,1) -> åˆ†ç»„æ±‡æ€» -> æ ¹æ®æ•°é‡æ’åº ->éå†æ‰“å°")
     txtRdd.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey((a, b) => a + b).sortBy(_._2).foreach(println)
 
     val sqlContext = new org.apache.spark.sql.SQLContext(ssc)
@@ -39,13 +43,12 @@ object SparkTest {
     })
     personRdd.registerTempTable("Tb_PBInfo")
     //   sqlContext.sparkContext.parallelize(tbRdd).registerTempTable("logInfo")
-    println("\n²éÑ¯ËùÓĞ:")
+    println("\næŸ¥è¯¢æ‰€æœ‰:")
     sqlContext.sql("select * from Tb_PBInfo").collect().foreach(println)
-    println("\n¹ıÂËËùÓĞÄê¼Í´óÓÚ18:")
+    println("\nè¿‡æ»¤æ‰€æœ‰å¹´çºªå¤§äº18:")
     sqlContext.sql("select * from Tb_PBInfo where age > 18").collect().foreach(println)
-    println("\n¹ıÂËËùÓĞ²»ÎªÂëÅ©µÄÄĞĞÔ:")
-    sqlContext.sql("select * from Tb_PBInfo where pf != 'ÂëÅ©' and sex = 'Å®'").collect().foreach(println)
+    println("\nè¿‡æ»¤æ‰€æœ‰ä¸ä¸ºç å†œçš„ç”·æ€§:")
+    sqlContext.sql("select * from Tb_PBInfo where pf != 'ç å†œ' and sex != 'å¥³'").collect().foreach(println)
     ssc.stop()
   }
 }
-
