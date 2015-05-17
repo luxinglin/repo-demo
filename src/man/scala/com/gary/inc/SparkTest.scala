@@ -1,7 +1,7 @@
 package com.gary.inc
 import org.apache.spark.{SparkConf, SparkContext}
 
-import org.apache.spark.SparkContext._
+import org.apache.spark.SparkContext._ 
 
 case class PBInfo(name: String, sex: String, age: Int, pf: String)
 
@@ -27,7 +27,7 @@ object SparkTest {
       println(idx + "::" + Thread.currentThread().getName + "::" + item.toString)
     })
 
-    println("把行以空格拆分 －> 给每个单词打上个数，变成单词(word,1) -> 分组汇总 -> 根据数量排序 ->遍历打印")
+    println("把行以空格拆分 －> 给每个句法单词打上个数，变成单词(word,1) -> 分组汇总 -> 根据数量排序 ->遍历打印")
     txtRdd.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey((a, b) => a + b).sortBy(_._2).foreach(println)
 
     val sqlContext = new org.apache.spark.sql.SQLContext(ssc)
