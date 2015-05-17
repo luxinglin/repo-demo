@@ -6,8 +6,8 @@ import org.apache.spark.SparkContext._
 /**
  * Created by luxing on 2015/5/17.
  */
-case class PBInfo(name: String, sex: String, age: Int, pf: String)
 
+case class PBInfo(name: String, sex: String, age: Int, pf: String)
 object SparkTest {
   def main(args: Array[String]): Unit = {
     val sparkConf = new SparkConf().setAppName("sptest").setMaster("local[*]")
@@ -21,7 +21,8 @@ object SparkTest {
     rdd.filter(_ < 3).map(_ * 2).foreach(println)
     println("读取文件:")
     //"hdfs://10.0.72.64:9000/hbase/rs600/bizRem.txt"
-    val txtRdd = ssc.textFile("C:\\Work\\90.TEMP\\IDEA_WorkSpace\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\str.txt")
+    val path = "C:\\Work\\90.TEMP\\IDEA_WorkSpace\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\"
+    val txtRdd = ssc.textFile(path + "str.txt")
 
     println("行数：" + txtRdd.count())
     var idx = 0
@@ -35,7 +36,8 @@ object SparkTest {
 
     val sqlContext = new org.apache.spark.sql.SQLContext(ssc)
     import sqlContext._
-    val tbRdd = ssc.textFile("C:\\Work\\90.TEMP\\IDEA_WorkSpace\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\tb.txt")
+
+    val tbRdd = ssc.textFile(path + "tb.txt")
     val personRdd = tbRdd.map(row => {
       val cols = row.split(" ")
       PBInfo(cols(0), cols(1), cols(2).toInt, cols(3))
