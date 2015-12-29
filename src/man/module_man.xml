@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_man" default="compile.module.man">
+    <dirname property="module.man.basedir" file="${ant.file.module_man}"/>
+
+    <property name="module.jdk.home.man" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.man" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.man" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.man" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+
+    <property name="man.output.dir" value="${module.man.basedir}/../../out/production/man"/>
+    <property name="man.testoutput.dir" value="${module.man.basedir}/../../out/test/man"/>
+
+    <path id="man.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="man.module.production.classpath">
+        <path refid="${module.jdk.classpath.man}"/>
+        <path refid="library.scala-sdk-2.10.4.classpath"/>
+        <path refid="library.spark-examples-1.2.1-hadoop2.4.0.classpath"/>
+    </path>
+
+    <path id="man.runtime.production.module.classpath">
+        <pathelement location="${man.output.dir}"/>
+        <path refid="library.scala-sdk-2.10.4.classpath"/>
+        <path refid="library.spark-examples-1.2.1-hadoop2.4.0.classpath"/>
+    </path>
+
+    <path id="man.module.classpath">
+        <path refid="${module.jdk.classpath.man}"/>
+        <pathelement location="${man.output.dir}"/>
+        <path refid="library.scala-sdk-2.10.4.classpath"/>
+        <path refid="library.spark-examples-1.2.1-hadoop2.4.0.classpath"/>
+    </path>
+
+    <path id="man.runtime.module.classpath">
+        <pathelement location="${man.testoutput.dir}"/>
+        <pathelement location="${man.output.dir}"/>
+        <path refid="library.scala-sdk-2.10.4.classpath"/>
+        <path refid="library.spark-examples-1.2.1-hadoop2.4.0.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.man">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.man">
+        <patternset refid="excluded.from.module.man"/>
+    </patternset>
+
+    <path id="man.module.sourcepath">
+        <dirset dir="${module.man.basedir}">
+            <include name="scala"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.man" depends="compile.module.man.production,compile.module.man.tests"
+            description="Compile module man"/>
+
+    <target name="compile.module.man.production" depends="register.custom.compilers"
+            description="Compile module man; production classes">
+        <mkdir dir="${man.output.dir}"/>
+        <javac2 destdir="${man.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.man}/javac">
+            <compilerarg line="${compiler.args.man}"/>
+            <bootclasspath refid="man.module.bootclasspath"/>
+            <classpath refid="man.module.production.classpath"/>
+            <src refid="man.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.man"/>
+        </javac2>
+
+        <copy todir="${man.output.dir}">
+            <fileset dir="${module.man.basedir}/scala">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.man.tests" depends="register.custom.compilers,compile.module.man.production"
+            description="compile module man; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.man" description="cleanup module">
+        <delete dir="${man.output.dir}"/>
+        <delete dir="${man.testoutput.dir}"/>
+    </target>
+</project>
