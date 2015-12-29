@@ -20,8 +20,8 @@ object SparkTest {
     println("result:")
     rdd.filter(_ < 3).map(_ * 2).foreach(println)
     println("读取文件:")
-    //"hdfs://10.0.72.64:9000/hbase/rs600/bizRem.txt"
-    val path = "C:\\Work\\90.TEMP\\IDEA_WorkSpace\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\"
+    //"hdfs://10.0.72.64:9000/hbase/rs600/bizRem.txt" bb
+    val path = "C:\\Users\\l61989\\IdeaProjects\\repo-demo\\src\\man\\scala\\com\\gary\\inc\\"
     val txtRdd = ssc.textFile(path + "str.txt")
 
     println("行数：" + txtRdd.count())
